@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 const VerifyPage = () => {
-  const { qrId } = useParams();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState('');
-
   const [status, setStatus] = useState(null);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (code.length !== 9) return alert("Please enter the complete 9-character code.");
+    if (code.length !== 9) return alert("Please enter the 9-character code.");
 
     setIsLoading(true);
     setStatus(null);
@@ -23,7 +20,6 @@ const VerifyPage = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          qrId: qrId,
           name: name,
           phone: phone,
           code: code
@@ -47,9 +43,9 @@ const VerifyPage = () => {
   };
 
   const getStyles = () => {
-    if (status === 'valid') return { bg: '#d4edda', color: '#155724', icon: '✅' };
-    if (status === 'already_verified') return { bg: '#fff3cd', color: '#856404', icon: '⚠️' };
-    if (status === 'invalid') return { bg: '#f8d7da', color: '#721c24', icon: '❌' };
+    // Solid colors for the result boxes so they are easy to read over the image
+    if (status === 'valid') return { bg: '#28a745', color: '#ffffff', icon: '✅' };
+    if (status === 'invalid') return { bg: '#dc3545', color: '#ffffff', icon: '❌' };
     return null;
   };
 
@@ -58,7 +54,9 @@ const VerifyPage = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundColor: '#f4f7f6',
+      backgroundImage: "url('/1.png')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -66,29 +64,46 @@ const VerifyPage = () => {
       padding: '20px'
     }}>
 
-      {/* Inner Card White box with shadow */}
+      {/* COMPLETELY TRANSPARENT CARD (No blur, just a tiny dark tint so text pops) */}
       <div style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: 'rgba(0, 0, 0, 0.2)', // 20% transparent black
         padding: '40px',
-        borderRadius: '12px',
-        boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+        borderRadius: '20px',
         width: '100%',
-        maxWidth: '420px'
+        maxWidth: '420px',
+        border: '1px solid rgba(255, 255, 255, 0.3)'
       }}>
 
-        <h2 style={{ margin: '0 0 8px 0', color: '#333', fontSize: '24px' }}>Verify Your Product</h2>
-        <p style={{ margin: '0 0 30px 0', color: '#666', fontSize: '14px' }}>
-          Verify your purchase by filling out the details below
-        </p>
+        {/* BRIGHT WHITE TEXT WITH SHADOW FOR MAXIMUM CLARITY */}
+        <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+          <h1 style={{
+            margin: '0 0 5px 0',
+            color: '#ffffff',
+            fontSize: '28px',
+            fontWeight: '800',
+            letterSpacing: '1px',
+            textShadow: '0px 2px 8px rgba(0,0,0,1)' // Strong black shadow behind white text
+          }}>
+            GHOST STRENGTH
+          </h1>
+          <p style={{
+            margin: 0,
+            color: '#dddddd',
+            fontSize: '14px',
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            textShadow: '0px 1px 4px rgba(0,0,0,1)'
+          }}>
+            Product Authentication
+          </p>
+        </div>
 
         {status !== 'valid' && (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
 
-            {/* Full Name Field */}
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#444', marginBottom: '8px' }}>
-                Full Name
-              </label>
+            <div>
+              <label style={labelStyle}>FULL NAME</label>
+              {/* SOLID WHITE INPUT BOXES FOR PERFECT READABILITY */}
               <input
                 type="text"
                 required
@@ -99,11 +114,8 @@ const VerifyPage = () => {
               />
             </div>
 
-            {/* Phone Number Field */}
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#444', marginBottom: '8px' }}>
-                Phone Number
-              </label>
+            <div>
+              <label style={labelStyle}>PHONE NUMBER</label>
               <input
                 type="tel"
                 required
@@ -114,60 +126,70 @@ const VerifyPage = () => {
               />
             </div>
 
-            {/* Verification Code Field */}
-            <div style={{ marginBottom: '25px' }}>
-              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#444', marginBottom: '8px' }}>
-                Product Verification Code
-              </label>
+            <div>
+              <label style={labelStyle}>SCRATCH CODE (9 DIGITS)</label>
               <input
                 type="text"
                 maxLength="9"
                 required
                 value={code}
                 onChange={handleCodeChange}
-                placeholder="Enter verification code"
-                style={{ ...inputStyle, letterSpacing: '2px', textTransform: 'uppercase' }}
-                disabled={isLoading || status === 'already_verified'}
+                placeholder="e.g., 119R6BVLC"
+                style={{ ...inputStyle, letterSpacing: '3px', fontWeight: 'bold' }}
+                disabled={isLoading}
               />
             </div>
 
-            {/* Submit Button */}
+            {/* SOLID WHITE BUTTON */}
             <button
               type="submit"
               disabled={isLoading || code.length !== 9}
-              style={buttonStyle}
+              style={{
+                width: '100%',
+                padding: '16px',
+                backgroundColor: (isLoading || code.length !== 9) ? 'rgba(255,255,255,0.5)' : '#ffffff',
+                color: '#111111',
+                border: 'none',
+                borderRadius: '10px',
+                fontSize: '16px',
+                fontWeight: '700',
+                letterSpacing: '1px',
+                cursor: (isLoading || code.length !== 9) ? 'not-allowed' : 'pointer',
+                marginTop: '10px'
+              }}
             >
-              {isLoading ? 'Verifying...' : 'Verify Product'}
+              {isLoading ? 'Verifying...' : 'VERIFY PRODUCT'}
             </button>
           </form>
         )}
 
-        {/* Result UI Green Yellow Red boxes */}
         {styles && (
           <div style={{
             marginTop: '25px',
             padding: '15px',
             backgroundColor: styles.bg,
             color: styles.color,
-            borderRadius: '8px',
-            fontWeight: '500',
-            fontSize: '14px',
-            textAlign: 'center'
+            borderRadius: '12px',
+            fontWeight: '600',
+            fontSize: '15px',
+            textAlign: 'center',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.5)' // Shadow on result box so it doesn't blend into background
           }}>
             {styles.icon} {message}
           </div>
         )}
 
-        {/* Bottom Encryption Text */}
         <div style={{
-          marginTop: '30px',
+          marginTop: '25px',
           display: 'flex',
+          justifyContent: 'center',
           alignItems: 'center',
           gap: '6px',
-          fontSize: '12px',
-          color: '#999'
+          fontSize: '11px',
+          color: 'rgba(255, 255, 255, 0.8)',
+          textShadow: '0px 1px 3px black'
         }}>
-          <span>🔒</span> End - to - End Encryption
+          <span>🔒</span> End-to-End Encrypted & Secured
         </div>
 
       </div>
@@ -175,27 +197,27 @@ const VerifyPage = () => {
   );
 };
 
+// White text labels with black shadow
+const labelStyle = {
+  display: 'block',
+  fontSize: '13px',
+  fontWeight: '600',
+  color: '#ffffff',
+  marginBottom: '8px',
+  textShadow: '0px 1px 4px rgba(0,0,0,1)'
+};
+
+// Solid white boxes with black text (Easiest to read and type in!)
 const inputStyle = {
   width: '100%',
   boxSizing: 'border-box',
-  padding: '12px 15px',
-  border: '1px solid #ddd',
-  borderRadius: '8px',
+  padding: '14px 15px',
+  border: 'none',
+  borderRadius: '10px',
   fontSize: '15px',
   outline: 'none',
-  transition: 'border 0.2s'
-};
-
-const buttonStyle = {
-  width: '100%',
-  padding: '14px',
-  backgroundColor: '#0056d2',
-  color: '#ffffff',
-  border: 'none',
-  borderRadius: '8px',
-  fontSize: '16px',
-  fontWeight: '600',
-  cursor: 'pointer',
+  backgroundColor: '#ffffff', // Solid white background
+  color: '#000000' // Black typing text
 };
 
 export default VerifyPage;

@@ -1,12 +1,15 @@
 package com.Authenticationsystem.dto;
 
-
 public class VerifyRequest {
-    private String qrId;
+    private String name;
+    private String phone;
     private String code;
 
-    public String getQrId() { return qrId; }
-    public void setQrId(String qrId) { this.qrId = qrId; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
     public String getCode() { return code; }
     public void setCode(String code) { this.code = code; }

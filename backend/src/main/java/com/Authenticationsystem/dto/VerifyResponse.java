@@ -1,7 +1,7 @@
 package com.Authenticationsystem.dto;
 
 public class VerifyResponse {
-    private String status; // "valid", "invalid", "already_verified"
+    private String status;
     private String message;
 
     public VerifyResponse(String status, String message) {
@@ -10,5 +10,8 @@ public class VerifyResponse {
     }
 
     public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
     public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
 }

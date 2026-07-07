@@ -6,8 +6,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* This matches the URL inside your QR code */}
-        <Route path="/verify/:qrId" element={<VerifyPage />} />
+        <Route path="/verify" element={<VerifyPage />} />
+        <Route path="/" element={
+          <div style={{ textAlign: 'center', marginTop: '100px', fontFamily: 'Arial' }}>
+            <h2>Welcome to Ghost Strength Authentication</h2>
+          </div>
+        } />
       </Routes>
     </Router>
   );
